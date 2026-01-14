@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 
 interface HistoryRow {
   id: number;
-  round_start_time: string;
+  round_start_time: string; // "2026-01-14 04:30:38"
   a1: number | null;
   a2: number | null;
   b1: number | null;
@@ -14,21 +14,32 @@ interface HistoryRow {
   created_at?: string;
 }
 
-function formatDateTime(date: string | null | undefined) {
-  if (!date) return "--";
-  const d = new Date(date);
+/**
+ * Display MySQL datetime as-is
+ * No timezone / hour conversion
+ */
+function formatDateTime(mysqlDate: string | null | undefined) {
+  if (!mysqlDate) {
+    return { datePart: "--", timePart: "--" };
+  }
 
-  const datePart = d.toLocaleDateString([], {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  });
+  // Extract safe parts only
+  const match = mysqlDate.match(
+    /^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})(?::(\d{2}))?/
+  );
 
-  const timePart = d.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  if (!match) {
+    return { datePart: "--", timePart: "--" };
+  }
+
+  const [, date, time, seconds = "00"] = match;
+
+  // Format date string only
+  const [year, month, day] = date.split("-");
+  const datePart = `${day}-${month}-${year}`;
+
+  // Keep time exactly as DB (no conversion)
+  const timePart = `${time}:${seconds}`;
 
   return { datePart, timePart };
 }
@@ -36,18 +47,15 @@ function formatDateTime(date: string | null | undefined) {
 export default function History({ history }: { history: HistoryRow[] }) {
   const [selectedDate, setSelectedDate] = useState<string>("");
 
+  /**
+   * Date filter — string based only
+   */
   const filteredHistory = useMemo(() => {
     if (!selectedDate) return history;
 
     return history.filter((row) => {
       if (!row.round_start_time) return false;
-
-      const d = new Date(row.round_start_time);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-
-      return `${y}-${m}-${day}` === selectedDate;
+      return row.round_start_time.slice(0, 10) === selectedDate;
     });
   }, [selectedDate, history]);
 
@@ -56,7 +64,7 @@ export default function History({ history }: { history: HistoryRow[] }) {
 
       {/* HEADER */}
       <h1 className="text-3xl font-extrabold text-center mb-3 text-green-400 tracking-widest">
-        🎰 Old RESULTS
+        🎰 OLD RESULTS
       </h1>
 
       {/* DATE FILTER */}
@@ -86,7 +94,7 @@ export default function History({ history }: { history: HistoryRow[] }) {
             No results found
           </div>
         ) : (
-          filteredHistory.map((row: HistoryRow) => {
+          filteredHistory.map((row) => {
             const start = formatDateTime(row.round_start_time);
 
             return (
@@ -100,12 +108,12 @@ export default function History({ history }: { history: HistoryRow[] }) {
                   shadow-[0_0_40px_rgba(34,197,94,0.35)]
                 "
               >
-                {/* RESULT */}
+                {/* RESULT NUMBERS */}
                 <div className="grid grid-cols-3 gap-8 text-center mb-8">
                   {[
-                    { label: "A", value: `${row.a1}${row.a2}` },
-                    { label: "B", value: `${row.b1}${row.b2}` },
-                    { label: "C", value: `${row.c1}${row.c2}` },
+                    { label: "A", value: `${row.a1 ?? "-"}${row.a2 ?? "-"}` },
+                    { label: "B", value: `${row.b1 ?? "-"}${row.b2 ?? "-"}` },
+                    { label: "C", value: `${row.c1 ?? "-"}${row.c2 ?? "-"}` },
                   ].map((item) => (
                     <div key={item.label}>
                       <div className="text-3xl font-extrabold text-red-600 mb-2">
@@ -119,27 +127,18 @@ export default function History({ history }: { history: HistoryRow[] }) {
                 </div>
 
                 {/* TIME */}
-                <div className="grid grid-cols-2 gap-8 text-center">
-                  <div>
-                    <div className="text-lg font-semibold text-green-300 mb-1">
-                      START
-                    </div>
-                    {/* <div className="text-xl text-gray-300">{start.datePart}</div>
-                    <div className="text-3xl font-bold text-white">
-                      {start.timePart}
-                    </div> */}
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-green-300 mb-1">
+                    TIME
                   </div>
-
-                  <div>
-                    <div className="text-lg font-semibold text-green-300 mb-1">
-                      END
-                    </div>
-                    {/* <div className="text-xl text-gray-300">{end.datePart}</div>
-                    <div className="text-3xl font-bold text-white">
-                      {end.timePart} */}
-                    {/* </div> */}
+                  <div className="text-xl text-gray-300">
+                    {start.datePart}
+                  </div>
+                  <div className="text-3xl font-bold text-white">
+                    {start.timePart}
                   </div>
                 </div>
+
               </div>
             );
           })

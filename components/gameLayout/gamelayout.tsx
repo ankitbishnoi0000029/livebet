@@ -9,13 +9,13 @@ type WheelKey = "a1" | "a2" | "b1" | "b2" | "c1" | "c2";
 type SelectionType = "numeric" | "image" | "mixed";
 
 interface GameState {
-  isActive: boolean;
-  timeUntilStart?: number;
-  timeUntilEnd?: number;
-  currentRound?: number;
-  roundTimeLeft?: number;
-  nextGameStart?: Date;
-  currentResults?: Record<WheelKey, number | null>;
+	isActive: boolean;
+	timeUntilStart?: number;
+	timeUntilEnd?: number;
+	currentRound?: number;
+	roundTimeLeft?: number;
+	nextGameStart?: Date;
+	currentResults?: Record<WheelKey, number | null>;
 }
 
 export const GameLayout = () => {
@@ -56,8 +56,46 @@ export const GameLayout = () => {
 	const [serverWheelValues, setServerWheelValues] = useState<Record<WheelKey, number | null>>({
 		a1: null, a2: null, b1: null, b2: null, c1: null, c2: null
 	});
-    const route = useRouter()
+	const route = useRouter()
+	const insertdata = async () => {
+	  
+		const now = new Date();
 
+		const indianTime = new Intl.DateTimeFormat("en-IN", {
+		  timeZone: "Asia/Kolkata",
+		  year: "numeric",
+		  month: "2-digit",
+		  day: "2-digit",
+		  hour: "2-digit",
+		  minute: "2-digit",
+		  second: "2-digit",
+		  hour12: true,
+		}).format(now);
+		
+		// Convert to MySQL-friendly format
+		// DD/MM/YYYY, hh:mm:ss AM → YYYY-MM-DD hh:mm:ss AM
+		const [date, time] = indianTime.split(", ");
+		const [day, month, year] = date.split("/");
+		
+		const dateTimeIST = `${year}-${month}-${day} ${time}`;
+	  
+		await insertHistory({
+		  round_start_time: dateTimeIST,
+		  a1: serverWheelValues.a1,
+		  a2: serverWheelValues.a2,
+		  b1: serverWheelValues.b1,
+		  b2: serverWheelValues.b2,
+		  c1: serverWheelValues.c1,
+		  c2: serverWheelValues.c2,
+		});
+	  };
+	  
+	//   useEffect(() => {
+	// 	if (roundTimeLeft == 30 ) {
+		  
+	// 	}
+	//   }, [roundTimeLeft, isWaiting]);
+	  
 	useEffect(() => {
 		const storedToken = sessionStorage.getItem("token");
 		if (storedToken !== token) {
@@ -194,8 +232,8 @@ export const GameLayout = () => {
 		socketConnection.on('round-saved', (data) => {
 			if (data.success) {
 				// Trigger save selections when round is saved
-			insertHistory({round_start_time:currentRound,a1:serverWheelValues.a1,a2:serverWheelValues.a2,b1:serverWheelValues.b1,b2:serverWheelValues.b2,c1:serverWheelValues.c1,c2:serverWheelValues.c2})
-				
+				// insertHistory({round_start_time:currentRound,a1:serverWheelValues.a1,a2:serverWheelValues.a2,b1:serverWheelValues.b1,b2:serverWheelValues.b2,c1:serverWheelValues.c1,c2:serverWheelValues.c2})
+
 			}
 		});
 
@@ -233,6 +271,7 @@ export const GameLayout = () => {
 				// Keep isWaiting true to show results until round ends
 				if (socket) {
 					socket.emit('round-complete', { roundNumber: currentRound });
+					insertdata();
 				}
 				// isWaiting will be reset by next round-start
 			}, 7200); // 7.2 seconds for spin animation (matches SpinWheel duration)

@@ -59,7 +59,7 @@ export default function CasinoSpinWheel3D({ value, spin ,onResult }: WheelType) 
 		setTimeout(() => {
 			setResult(selectedIndex);
 			setSpinning(false);
-			console.log("🎯 Result:", selectedIndex);
+			// console.log("🎯 Result:", selectedIndex);
 			if (onResult) {
 				onResult(selectedIndex);
 			}
@@ -72,7 +72,7 @@ export default function CasinoSpinWheel3D({ value, spin ,onResult }: WheelType) 
 		setSpinning(true);
 		handleSpin(value); // 👈 Pass value directly to handleSpin
 
-		console.log("reddux", value);
+		// console.log("reddux", value);
 	}, [spin, value]);
 
 	// 🎨 Wheel gradient

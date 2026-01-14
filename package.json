@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
-    "lint": "eslint"
-  },
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
+},
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "clsx": "^2.1.1",
