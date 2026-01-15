@@ -1,0 +1,118 @@
+/* ===============================
+   GLOBAL (NO SCROLL / TV SAFE)
+================================ */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  /* overflow: hidden; */
+}
+
+.app-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===============================
+   WHEEL CONTAINER (RESPONSIVE)
+================================ */
+.wheel-container {
+  position: relative;
+  width: clamp(140px, 25vw, 420px);
+  height: clamp(140px, 25vw, 420px);
+}
+
+/* Glow */
+.wheel-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #facc15, #ec4899, #9333ea);
+  filter: blur(22px);
+  opacity: 0.4;
+}
+
+/* Rim */
+.wheel-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+}
+
+/* Arrow */
+.wheel-arrow {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(60deg);
+  width: 0;
+  height: 0;
+  border-left: clamp(6px, 0.8vw, 12px) solid transparent;
+  border-right: clamp(6px, 0.8vw, 12px) solid transparent;
+  border-bottom: clamp(12px, 1.5vw, 22px) solid #ffd700;
+  z-index: 50;
+}
+
+/* Wheel */
+.wheel-main {
+  position: absolute;
+  inset: clamp(8px, 1.5vw, 16px);
+  border-radius: 50%;
+  transition: transform 7s ease-out;
+  box-shadow: inset 0 10px 18px rgba(255, 255, 255, 0.25),
+    inset 0 -14px 22px rgba(0, 0, 0, 0.9);
+}
+
+/* Numbers */
+.wheel-number-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.wheel-number {
+  margin-top: clamp(10px, 2vw, 22px);
+  font-size: clamp(12px, 2vw, 26px);
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+  transform: rotate(103deg);
+}
+
+/* Gloss */
+.wheel-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at top,
+      rgba(255, 255, 255, 0.35),
+      transparent 60%);
+}
+
+/* Center Button */
+.wheel-button {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: clamp(44px, 6vw, 88px);
+  height: clamp(44px, 6vw, 88px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fde68a, #facc15, #ca8a04);
+  border: 1px solid rgba(253, 224, 71, 0.8);
+  cursor: pointer;
+  z-index: 50;
+}
+
+.wheel-button:active {
+  transform: scale(0.95);
+}

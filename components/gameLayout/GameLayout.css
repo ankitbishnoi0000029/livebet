@@ -1,0 +1,415 @@
+/* ===============================
+   GLOBAL RESET + SCREEN FIT
+================================ */
+* {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    /* overflow: hidden; 🚫 NO SCROLL */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  #root, body > div {
+    height: 100%;
+  }
+  
+  /* ===============================
+     MAIN SCREEN
+  ================================ */
+  .game-screen {
+    /* height: 100vh; */
+    width: 100vw;
+    background: linear-gradient(135deg,#010341,#050434,#00064c);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 1.5vw, 24px);
+    /* overflow: hidden; 🚫 NO SCROLL */
+  }
+  
+  /* ===============================
+     MAIN LAYOUT GRID
+  ================================ */
+  .game-container {
+    height: 100%;
+    width: 100%;
+    max-width: 1800px; /* BIG LCD SAFE */
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(16px, 2vw, 48px);
+    align-items: center;
+  }
+  
+  /* ===============================
+     LEFT PANEL (WHEELS)
+  ================================ */
+  .left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2vh, 20px);
+  }
+  
+  /* WHEEL CARD */
+  .wheel-wrapper {
+    position: relative;
+    /* padding: clamp(12px, 2vw, 24px); */
+    border-radius: 20px;
+    border: 1px solid rgba(99,102,241,0.4);
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+  }
+  
+  /* LABEL A B C */
+  .wheel-title {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e0e7ff;
+    color: black;
+    padding: 4px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: clamp(12px, 1vw, 16px);
+  }
+  
+  /* TWO WHEELS */
+  .wheel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    place-items: center;
+  }
+  
+  /* DROPDOWN CONTAINER */
+  .wheel-select-container {
+    position: absolute;
+    bottom: 8px;
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(250,204,21,0.5);
+  }
+  
+  /* SELECT */
+  .select-box {
+    width: clamp(32px, 3vw, 48px);
+    height: clamp(36px, 4vh, 52px);
+    text-align: center;
+    font-weight: 800;
+    font-size: clamp(12px, 1.2vw, 20px);
+    background: linear-gradient(#000,#222);
+    color: #facc15;
+    border: 1px solid rgba(250,204,21,0.7);
+    border-radius: 6px;
+  }
+  
+  /* ===============================
+     RIGHT PANEL
+  ================================ */
+  .right-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  
+  /* ===============================
+     9 AM TO 9 PM PANEL
+  ================================ */
+  .time-range-box {
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(12px, 1.5vw, 20px);
+    border-radius: 20px;
+    border: 1px solid rgba(236,72,153,0.4);
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    text-align: center;
+  }
+  
+  .time-range-title {
+    font-size: clamp(10px, 0.9vw, 13px);
+    letter-spacing: 0.25em;
+    color: #f472b6;
+    margin-bottom: 8px;
+  }
+  
+  .time-range {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .time-range span {
+    background: rgba(0,0,0,0.4);
+    padding: 6px 14px;
+    border-radius: 10px;
+    color: #facc15;
+    font-size: clamp(12px, 1vw, 16px);
+    font-weight: 700;
+  }
+  
+  .time-range .to {
+    background: none;
+    color: #d1d5db;
+  }
+  
+  /* ===============================
+     TIMER
+  ================================ */
+  .timer-box {
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(16px, 2vw, 24px);
+    border-radius: 20px;
+    border: 1px solid rgba(250,204,21,0.7);
+    background: rgba(0,0,0,0.4);
+    text-align: center;
+  }
+  
+  .timer-heading {
+    font-size: clamp(14px, 1.2vw, 18px);
+    margin-bottom: 12px;
+  }
+  
+  .timer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  
+  .timer-card {
+    padding: clamp(12px, 2vh, 20px);
+    border-radius: 14px;
+    background: linear-gradient(135deg,#4338ca,#312e81);
+  }
+  
+  .timer-card p {
+    font-size: clamp(26px, 4vw, 48px);
+    font-weight: 800;
+    color: #facc15;
+  }
+  
+  /* ===============================
+     RESULT PANEL
+  ================================ */
+  .result-box {
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(16px, 2vw, 24px);
+    border-radius: 20px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(250,204,21,0.6);
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .result-box:hover {
+    transform: translateY(-4px);
+  }
+  
+  .result-grid {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+  }
+  
+  .result-card {
+    background: rgba(0,0,0,0.4);
+    border-radius: 14px;
+    padding: clamp(10px, 1.5vw, 16px);
+    text-align: center;
+  }
+  
+  .result-label {
+    font-size: clamp(40px, 6vw, 64px);
+    color: #e5e7eb;
+  }
+  
+  .result-value {
+    font-size: clamp(22px, 3vw, 36px);
+    color: #facc15;
+    font-weight: 800;
+  }
+  
+  /* ===============================
+     MOBILE FALLBACK
+  ================================ */
+  @media (max-width: 900px) {
+    .game-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .right-panel {
+      justify-content: center;
+      gap: 20px;
+    }
+  }
+  /* ===============================
+   RESULT TITLE & SUB TEXT
+================================ */
+.result-title {
+    text-align: center;
+    font-size: clamp(20px, 2.5vw, 32px); /* fits TV + mobile */
+    font-weight: 800;
+    color: #facc15; /* gold */
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  
+  .result-sub {
+    margin-top: 6px;
+    text-align: center;
+    font-size: clamp(12px, 1.2vw, 16px);
+    font-weight: 500;
+    color: #d1d5db; /* soft white */
+    opacity: 0.9;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  
+  /* Hover effect (TV / mouse safe) */
+  .result-sub:hover {
+    color: #facc15;
+    transform: translateY(-2px);
+  }
+  
+  /* Active (touch / remote click) */
+  .result-sub:active {
+    transform: scale(0.96);
+  }
+  /* ===============================
+   SELECT BOX (GLOBAL STYLE)
+================================ */
+.select-box {
+    appearance: none;           /* remove default arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  
+    min-width: 70px;
+    height: clamp(36px, 5vh, 52px);
+  
+    padding: 0 34px 0 14px;
+    border-radius: 10px;
+  
+    background-color: #111827;  /* dark background */
+    color: #f9fafb;             /* white text */
+  
+    font-size: clamp(14px, 1.8vw, 18px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  
+    border: 1px solid rgba(250, 204, 21, 0.7);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 6px 14px rgba(0, 0, 0, 0.6);
+  
+    cursor: pointer;
+    outline: none;
+    transition: all 0.25s ease;
+  }
+  
+  /* Custom dropdown arrow */
+  .select-box {
+    background-image:
+      linear-gradient(45deg, transparent 50%, #facc15 50%),
+      linear-gradient(135deg, #facc15 50%, transparent 50%),
+      linear-gradient(to right, transparent, transparent);
+    background-position:
+      calc(100% - 18px) 50%,
+      calc(100% - 12px) 50%,
+      100% 0;
+    background-size:
+      6px 6px,
+      6px 6px,
+      2.5em 2.5em;
+    background-repeat: no-repeat;
+  }
+  
+  /* Hover (mouse / TV pointer) */
+  .select-box:hover {
+    border-color: #fde047;
+    box-shadow: 0 0 14px rgba(250, 204, 21, 0.45);
+  }
+  
+  /* Focus (keyboard / remote) */
+  .select-box:focus-visible {
+    border-color: #facc15;
+    box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.45);
+  }
+  
+  /* Disabled state */
+  .select-box:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* ===============================
+     OPTION STYLE
+     (limited by browser, still clean)
+  ================================ */
+  .select-box option {
+    background-color: #111827;
+    color: #f9fafb;
+    font-weight: 600;
+  }
+  /* ===============================
+   GAME RESULT TIMING TITLE
+================================ */
+.time-range-title {
+    text-align: center;
+    font-size: clamp(12px, 1.6vw, 18px); /* TV + mobile safe */
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+  
+    color: #ec4899; /* pink accent */
+    margin-bottom: 10px;
+  
+    opacity: 0.95;
+  }
+  
+  /* Optional glow for large screens */
+  @media (min-width: 1024px) {
+    .time-range-title {
+      text-shadow:
+        0 0 6px rgba(236, 72, 153, 0.35),
+        0 0 12px rgba(236, 72, 153, 0.25);
+    }
+  }
+  /* ===============================
+   GAME RESULT TIMING TITLE
+================================ */
+.time-range-title {
+    text-align: center;
+    font-size: clamp(12px, 1.6vw, 18px); /* TV + mobile safe */
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+  
+    color: #ec4899; /* pink accent */
+    margin-bottom: 10px;
+  
+    opacity: 0.95;
+  }
+  
+  /* Optional glow for large screens */
+  @media (min-width: 1024px) {
+    .time-range-title {
+      text-shadow:
+        0 0 6px rgba(236, 72, 153, 0.35),
+        0 0 12px rgba(236, 72, 153, 0.25);
+    }
+  }
+  
