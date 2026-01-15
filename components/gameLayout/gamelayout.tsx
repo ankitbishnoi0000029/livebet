@@ -66,7 +66,9 @@ export const GameLayout = () => {
       setServerWheelValues(d.wheelValues);
     });
 
-    return () => s.disconnect();
+    return () => {
+      s.disconnect();
+    };
   }, []);
 
   const { minutes, seconds } = getTime(roundTimeLeft);
